@@ -1,14 +1,15 @@
 # Baseline 开工指南
 
-先用 Python 和 scikit-learn 做规则与逻辑回归。两项任务都使用 [共享数据](../data/README.md) 和 [共同实验设计](../docs/experiment-design.md)。
+用 Python 和 scikit-learn 跑规则、逻辑回归、线性 SVM 和多项朴素贝叶斯。两项任务都使用 [共享数据](../data/README.md) 和 [共同实验设计](../docs/experiment-design.md)。
 
-| 顺序 | Q1 有没有关系 | Q2 是哪种关系 |
+| 模型 | Q1 有没有关系 | Q2 是哪种关系 |
 | --- | --- | --- |
-| 1 | 同句共现规则。只要两个实体至少有一对提及出现在同一句，就预测有关系。 | 训练集中出现最多的关系类型，作为多数类基线。 |
-| 2 | 二分类逻辑回归。对所有候选实体对训练。 | 多项逻辑回归。只用已标注关系的实体对，预测八类之一。 |
-| 可选 | 完成逻辑回归后，有余力可用同样特征试 `LinearSVC`。 | 第一轮先完成一个多项逻辑回归模型。 |
+| 简单参照 | 同句共现规则。只要两个实体至少有一对提及出现在同一句，就预测有关系。 | 训练集中出现最多的关系类型，作为多数类基线。 |
+| 逻辑回归 | 跑仅结构、仅文本、结构加文本三组。 | 用多项逻辑回归跑相同三组输入，每个模型直接预测八类之一。 |
+| 线性 SVM | 用与逻辑回归相同的仅文本特征，比较两种分类器。 | — |
+| 多项朴素贝叶斯 | 复用仅文本特征。 | 复用仅文本特征，作为快速的八分类对照。 |
 
-逻辑回归可以从 `LogisticRegression(solver="lbfgs", C=1, max_iter=1000)` 开始。保留相同的候选对和数据划分，分别跑下列三种输入。 [scikit-learn 逻辑回归](https://scikit-learn.org/stable/modules/generated/sklearn.linear_model.LogisticRegression.html) · [LinearSVC](https://scikit-learn.org/stable/modules/generated/sklearn.svm.LinearSVC.html)
+逻辑回归可以从 `LogisticRegression(solver="lbfgs", C=1, max_iter=1000)` 开始。线性 SVM 用 `LinearSVC(C=1)`，Q1 用 `decision_function` 的分数计算 average precision，并在 Dev 选阈值。多项朴素贝叶斯用 `MultinomialNB(alpha=1.0)`，输入限于非负的 TF-IDF。同一任务内，各模型复用词表、数据划分和评估代码。 [逻辑回归](https://scikit-learn.org/stable/modules/generated/sklearn.linear_model.LogisticRegression.html) · [线性 SVM](https://scikit-learn.org/stable/modules/generated/sklearn.svm.LinearSVC.html) · [多项朴素贝叶斯](https://scikit-learn.org/stable/modules/generated/sklearn.naive_bayes.MultinomialNB.html)
 
 | 输入 | 怎么做 |
 | --- | --- |
@@ -18,4 +19,4 @@
 
 从 BioC 为所有候选对计算同句特征。关系标签表里的 `same_sentence_mention` 只有已标注对才有，可以用来抽查，直接拿去填候选表会把标签信息带进特征。实体 ID 与 PMID 用来对齐样本。词表、标准化和模型在 Train 拟合，Dev 用来选择参数与 Q1 阈值，Test 留作最终评估。 [TF-IDF 参数说明](https://scikit-learn.org/stable/modules/generated/sklearn.feature_extraction.text.TfidfVectorizer.html)
 
-交付时带上可复跑的训练命令和逐样本预测，记录特征版本和参数。Q1 报告有关系类的 precision、recall、F1 和 average precision，逐样本预测同时给出有关系分数。Q2 报告八类 macro-F1、各类 F1、样本数和混淆矩阵。先看「结构加文本」比「仅结构」提升多少，再把「仅文本」结果与强模型比较。
+交付时带上可复跑的训练命令和逐样本预测，记录特征版本和参数。Q1 报告有关系类的 precision、recall、F1 和 average precision，逐样本预测同时给出有关系分数。Q2 报告八类 macro-F1、各类 F1、样本数和混淆矩阵。用逻辑回归的「结构加文本」和「仅结构」衡量文本增益，再用各模型的「仅文本」结果比较同一文本输入下的表现。

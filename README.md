@@ -10,7 +10,7 @@ Both tracks use the same candidate pairs, official splits, and evaluation metric
 | Path | Contents |
 | --- | --- |
 | [Experiment design](docs/experiment-design.md) | Task scope, shared input and output, and evaluation |
-| [Baseline](baseline/README.md) | Rules, logistic regression, and feature recipes |
+| [Baseline](baseline/README.md) | Rules, logistic regression, linear SVM, naive Bayes, and feature recipes |
 | [SOTA track](sota/README.md) | BioBERT pre-trained model plan for both tasks |
 | [Data](data/README.md) | Candidate and relation-label tables and the original BioRED download |
 
