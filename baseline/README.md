@@ -1,0 +1,21 @@
+# Baseline 开工指南
+
+先用 Python 和 scikit-learn 做规则与逻辑回归。两项任务都使用 [共享数据](../data/README.md) 和 [共同实验设计](../docs/experiment-design.md)。
+
+| 顺序 | Q1 有没有关系 | Q2 是哪种关系 |
+| --- | --- | --- |
+| 1 | 同句共现规则。只要两个实体至少有一对提及出现在同一句，就预测有关系。 | 训练集中出现最多的关系类型，作为多数类基线。 |
+| 2 | 二分类逻辑回归。对所有候选实体对训练。 | 多项逻辑回归。只用已标注关系的实体对，预测八类之一。 |
+| 可选 | 完成逻辑回归后，有余力可用同样特征试 `LinearSVC`。 | 第一轮先完成一个多项逻辑回归模型。 |
+
+逻辑回归可以从 `LogisticRegression(solver="lbfgs", C=1, max_iter=1000)` 开始。保留相同的候选对和数据划分，分别跑下列三种输入。 [scikit-learn 逻辑回归](https://scikit-learn.org/stable/modules/generated/sklearn.linear_model.LogisticRegression.html) · [LinearSVC](https://scikit-learn.org/stable/modules/generated/sklearn.svm.LinearSVC.html)
+
+| 输入 | 怎么做 |
+| --- | --- |
+| **仅结构** | 从 BioC 的实体标注和位置提取最小词距、两个实体各自的提及次数、是否共享句子、实体对类型。词距和次数可用 `log1p` 再标准化，是否同句用 0/1，实体对类型用 one-hot。 |
+| **仅文本** | 读两条线共用的带实体标记的上下文列，用 `TfidfVectorizer(ngram_range=(1, 2), min_df=2)` 提取词和双词短语。保留否定词。 |
+| **结构加文本** | 将上面两个特征矩阵横向拼接。可以用 `ColumnTransformer` 和 `Pipeline`，保留 TF-IDF 的稀疏表示。 |
+
+从 BioC 为所有候选对计算同句特征。关系标签表里的 `same_sentence_mention` 只有已标注对才有，可以用来抽查，直接拿去填候选表会把标签信息带进特征。实体 ID 与 PMID 用来对齐样本。词表、标准化和模型在 Train 拟合，Dev 用来选择参数与 Q1 阈值，Test 留作最终评估。 [TF-IDF 参数说明](https://scikit-learn.org/stable/modules/generated/sklearn.feature_extraction.text.TfidfVectorizer.html)
+
+交付时带上可复跑的训练命令和逐样本预测，记录特征版本和参数。Q1 报告有关系类的 precision、recall、F1 和 average precision，逐样本预测同时给出有关系分数。Q2 报告八类 macro-F1、各类 F1、样本数和混淆矩阵。先看「结构加文本」比「仅结构」提升多少，再把「仅文本」结果与强模型比较。
