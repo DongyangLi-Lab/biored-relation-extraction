@@ -13,10 +13,10 @@
 
 | 输入 | 怎么做 |
 | --- | --- |
-| **仅结构** | 从 BioC 的实体标注和位置提取最小词距、两个实体各自的提及次数、是否共享句子、实体对类型。词距和次数可用 `log1p` 再标准化，是否同句用 0/1，实体对类型用 one-hot。 |
-| **仅文本** | 读两条线共用的带实体标记的上下文列，用 `TfidfVectorizer(ngram_range=(1, 2), min_df=2)` 提取词和双词短语。保留否定词。 |
+| **仅结构** | 从共享预处理表读取 `min_token_gap`、`entity1_mentions`、`entity2_mentions`、`same_sentence` 和 `pair_type`。词距和次数可用 `log1p` 再标准化，`pair_type` 用 one-hot。 |
+| **仅文本** | 读取共享预处理表的 `context_local`，用 `TfidfVectorizer(ngram_range=(1, 2), min_df=2)` 提取词和双词短语。保留否定词。 |
 | **结构加文本** | 将上面两个特征矩阵横向拼接。可以用 `ColumnTransformer` 和 `Pipeline`，保留 TF-IDF 的稀疏表示。 |
 
-从 BioC 为所有候选对计算同句特征。关系标签表里的 `same_sentence_mention` 只有已标注对才有，可以用来抽查，直接拿去填候选表会把标签信息带进特征。实体 ID 与 PMID 用来对齐样本。词表、标准化和模型在 Train 拟合，Dev 用来选择参数与 Q1 阈值，Test 留作最终评估。 [TF-IDF 参数说明](https://scikit-learn.org/stable/modules/generated/sklearn.feature_extraction.text.TfidfVectorizer.html)
+同句共现规则直接用候选表的 `same_sentence` 作预测。按 `split` 取 Train、Dev 和 Test。生成完整特征表的命令见共享数据说明。实体 ID 与 PMID 用来对齐样本。词表、标准化和模型在 Train 拟合，Dev 用来选择参数与 Q1 阈值，Test 留作最终评估。 [候选表](../data/candidate_pairs.csv) · [共享数据说明](../data/README.md) · [TF-IDF 参数说明](https://scikit-learn.org/stable/modules/generated/sklearn.feature_extraction.text.TfidfVectorizer.html)
 
 交付时带上可复跑的训练命令和逐样本预测，记录特征版本和参数。Q1 报告有关系类的 precision、recall、F1 和 average precision，逐样本预测同时给出有关系分数。Q2 报告八类 macro-F1、各类 F1、样本数和混淆矩阵。用逻辑回归的「结构加文本」和「仅结构」衡量文本增益，再用各模型的「仅文本」结果比较同一文本输入下的表现。
