@@ -147,5 +147,154 @@
         ]
       ]
     }
+  },
+  "Test": {
+    "n": 1163,
+    "macro_f1_8_classes": 0.265,
+    "macro_f1_present_classes": 0.265,
+    "per_class": {
+      "Association": {
+        "n": 635,
+        "precision": 0.7253,
+        "recall": 0.8772,
+        "f1": 0.794
+      },
+      "Positive_Correlation": {
+        "n": 325,
+        "precision": 0.5692,
+        "recall": 0.4554,
+        "f1": 0.506
+      },
+      "Negative_Correlation": {
+        "n": 171,
+        "precision": 0.4615,
+        "recall": 0.3509,
+        "f1": 0.3987
+      },
+      "Bind": {
+        "n": 9,
+        "precision": 0.0,
+        "recall": 0.0,
+        "f1": 0.0
+      },
+      "Cotreatment": {
+        "n": 14,
+        "precision": 0.8,
+        "recall": 0.2857,
+        "f1": 0.4211
+      },
+      "Comparison": {
+        "n": 6,
+        "precision": 0.0,
+        "recall": 0.0,
+        "f1": 0.0
+      },
+      "Drug_Interaction": {
+        "n": 2,
+        "precision": 0.0,
+        "recall": 0.0,
+        "f1": 0.0
+      },
+      "Conversion": {
+        "n": 1,
+        "precision": 0.0,
+        "recall": 0.0,
+        "f1": 0.0
+      }
+    },
+    "confusion_matrix": {
+      "labels": [
+        "Association",
+        "Positive_Correlation",
+        "Negative_Correlation",
+        "Bind",
+        "Cotreatment",
+        "Comparison",
+        "Drug_Interaction",
+        "Conversion"
+      ],
+      "rows_true_columns_predicted": [
+        [
+          557,
+          54,
+          24,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          144,
+          148,
+          32,
+          0,
+          1,
+          0,
+          0,
+          0
+        ],
+        [
+          55,
+          56,
+          60,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          8,
+          0,
+          1,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          3,
+          0,
+          7,
+          0,
+          4,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          1,
+          5,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          1,
+          1,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          1,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ]
+      ]
+    }
   }
 }

@@ -20,5 +20,26 @@
         "f1": 0.1114
       }
     }
+  },
+  "Test": {
+    "n": 7047,
+    "precision": 0.4744,
+    "recall": 0.6131,
+    "f1": 0.5349,
+    "average_precision": 0.5289,
+    "by_same_sentence": {
+      "same_sentence": {
+        "n": 2699,
+        "precision": 0.5371,
+        "recall": 0.7335,
+        "f1": 0.6201
+      },
+      "different_sentences": {
+        "n": 4348,
+        "precision": 0.1126,
+        "recall": 0.1111,
+        "f1": 0.1119
+      }
+    }
   }
 }
