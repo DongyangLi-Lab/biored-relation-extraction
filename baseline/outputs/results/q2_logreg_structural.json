@@ -1,26 +1,26 @@
 {
   "Dev": {
     "n": 1161,
-    "macro_f1_8_classes": 0.2103,
-    "macro_f1_present_classes": 0.2804,
+    "macro_f1_8_classes": 0.2209,
+    "macro_f1_present_classes": 0.2946,
     "per_class": {
       "Association": {
         "n": 560,
-        "precision": 0.6206,
-        "recall": 0.8268,
-        "f1": 0.709
+        "precision": 0.6235,
+        "recall": 0.825,
+        "f1": 0.7102
       },
       "Positive_Correlation": {
         "n": 352,
-        "precision": 0.437,
-        "recall": 0.3352,
-        "f1": 0.3794
+        "precision": 0.4508,
+        "recall": 0.3381,
+        "f1": 0.3864
       },
       "Negative_Correlation": {
         "n": 216,
-        "precision": 0.3603,
-        "recall": 0.2269,
-        "f1": 0.2784
+        "precision": 0.3893,
+        "recall": 0.2685,
+        "f1": 0.3178
       },
       "Bind": {
         "n": 18,
@@ -30,9 +30,9 @@
       },
       "Cotreatment": {
         "n": 10,
-        "precision": 0.3333,
+        "precision": 0.4286,
         "recall": 0.3,
-        "f1": 0.3158
+        "f1": 0.3529
       },
       "Comparison": {
         "n": 5,
@@ -66,31 +66,31 @@
       ],
       "rows_true_columns_predicted": [
         [
-          463,
-          62,
-          32,
+          462,
+          64,
+          33,
+          0,
+          1,
+          0,
+          0,
+          0
+        ],
+        [
+          188,
+          119,
+          45,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          74,
+          81,
+          58,
           0,
           3,
-          0,
-          0,
-          0
-        ],
-        [
-          190,
-          118,
-          44,
-          0,
-          0,
-          0,
-          0,
-          0
-        ],
-        [
-          75,
-          90,
-          49,
-          0,
-          2,
           0,
           0,
           0
@@ -106,9 +106,9 @@
           0
         ],
         [
-          3,
+          2,
           0,
-          4,
+          5,
           0,
           3,
           0,
@@ -118,9 +118,9 @@
         [
           0,
           0,
-          4,
+          5,
           0,
-          1,
+          0,
           0,
           0,
           0

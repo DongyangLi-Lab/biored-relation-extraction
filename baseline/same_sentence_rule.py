@@ -1,10 +1,10 @@
 """Q1 baseline: same-sentence co-occurrence rule.
 
-Predicts a relation when two entities are mentioned in at least one shared sentence.
-Uses shares_sentence from baseline/outputs/structural_features.csv.
+Predicts a relation when two entities are mentioned in at least one shared sentence,
+using the shared same_sentence column.
 
 Usage (from repository root):
-    python baseline/structural_features.py      # once, to build the features
+    python sota/prepare_pairs.py                 # once, to build data/processed/
     python baseline/same_sentence_rule.py        # Dev
     python baseline/same_sentence_rule.py --test # Dev and Test, once the method is fixed
 """
@@ -24,7 +24,7 @@ def main():
     results = {}
     for split in evaluated_splits(args):
         part = table[table["split"] == split]
-        predicted = part["shares_sentence"].to_numpy()
+        predicted = part["same_sentence"].to_numpy()
         # The rule has no graded score, so the 0/1 prediction doubles as the score for average precision.
         results[split] = q1_metrics(part, predicted, predicted)
         print_q1(split, results[split])

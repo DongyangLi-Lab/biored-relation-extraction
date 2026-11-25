@@ -1,6 +1,6 @@
 """Shared evaluation and output writing for both tasks.
 
-Q1: precision, recall, F1 for the has-relation class, average precision, and the same scores split by shares_sentence.
+Q1: precision, recall, F1 for the has-relation class, average precision, and the same scores split by same_sentence.
 Q2: eight-class macro-F1, per-class F1 and support, and a confusion matrix in RELATION_TYPES order.
 """
 
@@ -35,10 +35,10 @@ def q1_metrics(table, scores, predicted):
     y = table["annotated_relation"].to_numpy()
     result = binary_scores(y, predicted)
     result["average_precision"] = round(float(average_precision_score(y, scores)), 4)
-    result["by_shares_sentence"] = {}
+    result["by_same_sentence"] = {}
     for value, name in [(1, "same_sentence"), (0, "different_sentences")]:
-        mask = (table["shares_sentence"] == value).to_numpy()
-        result["by_shares_sentence"][name] = binary_scores(y[mask], predicted[mask])
+        mask = (table["same_sentence"] == value).to_numpy()
+        result["by_same_sentence"][name] = binary_scores(y[mask], predicted[mask])
     return result
 
 
@@ -87,7 +87,7 @@ def save_results(task, model, results):
 
 def print_q1(split, m):
     print(f"{split}: n={m['n']}  P={m['precision']:.3f}  R={m['recall']:.3f}  F1={m['f1']:.3f}  AP={m['average_precision']:.3f}")
-    for name, g in m["by_shares_sentence"].items():
+    for name, g in m["by_same_sentence"].items():
         print(f"    {name:<20} n={g['n']:<5}  P={g['precision']:.3f}  R={g['recall']:.3f}  F1={g['f1']:.3f}")
 
 
