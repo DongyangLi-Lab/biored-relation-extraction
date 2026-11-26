@@ -62,7 +62,12 @@ def main():
     threshold = pick_threshold(dev["annotated_relation"], has_relation_scores(model, dev))
     print(f"{model_name}: threshold chosen on Dev = {threshold:.4f}")
 
-    results = {"threshold": round(threshold, 4)}
+    # Train scores use the same Dev threshold; comparing them with Dev and Test shows how much the model overfits.
+    train_scores = has_relation_scores(model, train)
+    results = {
+        "threshold": round(threshold, 4),
+        "Train": q1_metrics(train, train_scores, (train_scores >= threshold).astype(int)),
+    }
     for split in evaluated_splits(args):
         part = table[table["split"] == split]
         scores = has_relation_scores(model, part)

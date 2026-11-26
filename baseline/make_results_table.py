@@ -64,11 +64,10 @@ def predictions(task, model, split="Test"):
     return pd.read_csv(OUTPUT_DIR / "predictions" / f"{task}_{model}_{split}.csv", dtype=str)
 
 
-def paired_bootstrap(task, metric):
-    """Resample Test abstracts with replacement; score both models on the same sample each round.
+def bootstrap(task, metric):
+    """Resample Test abstracts with replacement; score both logistic regression models on the same sample each round.
 
-    Returns the observed gain (structural+text minus structural), its 2.5th and 97.5th percentiles,
-    and the share of rounds in which the gain is positive.
+    Returns the observed (structural+text, structural) scores and one array of round scores per model.
     """
     both, structural = predictions(task, "logreg_both"), predictions(task, "logreg_structural")
     key = ["pmid", "pair_type", "entity1", "entity2"]
@@ -76,13 +75,18 @@ def paired_bootstrap(task, metric):
         raise SystemExit(f"{task} prediction files are not in the same row order.")
     rows_by_abstract = list(both.groupby("pmid").indices.values())
     rng = np.random.default_rng(BOOTSTRAP_SEED)
-    gains = []
+    both_rounds, structural_rounds = [], []
     for _ in range(BOOTSTRAP_ROUNDS):
         picked = rng.integers(0, len(rows_by_abstract), len(rows_by_abstract))
         rows = np.concatenate([rows_by_abstract[i] for i in picked])
-        gains.append(metric(both.iloc[rows]) - metric(structural.iloc[rows]))
-    low, high = np.percentile(gains, [2.5, 97.5])
-    return metric(both) - metric(structural), low, high, float(np.mean(np.array(gains) > 0))
+        both_rounds.append(metric(both.iloc[rows]))
+        structural_rounds.append(metric(structural.iloc[rows]))
+    return (metric(both), metric(structural)), np.array(both_rounds), np.array(structural_rounds)
+
+
+def interval(values):
+    low, high = np.percentile(values, [2.5, 97.5])
+    return low, high
 
 
 def q1_f1(p):
@@ -98,17 +102,38 @@ def q2_macro_f1(p):
 
 
 def gain_section():
-    rows = []
+    gain_rows, range_rows = [], []
     for task, name, metric in [("q1", "Q1 F1", q1_f1), ("q1", "Q1 AP", q1_ap), ("q2", "Q2 八类 macro-F1", q2_macro_f1)]:
-        gain, low, high, positive = paired_bootstrap(task, metric)
+        (both, structural), both_rounds, structural_rounds = bootstrap(task, metric)
+        gains = both_rounds - structural_rounds
+        low, high = interval(gains)
         stable = "是" if low > 0 else "否，区间含 0"
-        rows.append([name, f"{gain:+.3f}", f"{low:+.3f} 至 {high:+.3f}", f"{positive:.1%}", stable])
+        gain_rows.append([name, f"{both - structural:+.3f}", f"{low:+.3f} 至 {high:+.3f}", f"{np.mean(gains > 0):.1%}", stable])
+        low, high = interval(both_rounds)
+        range_rows.append([name, f(both), f"{low:.3f} 至 {high:.3f}", f"±{(high - low) / 2:.3f}"])
     return "\n\n".join([
         "## 文本增益的稳定性",
         f"配对 bootstrap：按摘要对 Test 有放回重抽 {BOOTSTRAP_ROUNDS:,} 次，每次两个逻辑回归模型使用同一批摘要，"
         f"计算「结构加文本」减「仅结构」的差值（随机种子 {BOOTSTRAP_SEED}）。",
-        table(["指标", "增益", "95% 区间", "增益大于 0 的比例", "稳定提升"], rows, text_columns=1),
+        table(["指标", "增益", "95% 区间", "增益大于 0 的比例", "稳定提升"], gain_rows, text_columns=1),
         "95% 区间全部在 0 以上，才认为文本带来稳定提升；区间含 0 时，提升与抽样波动无法区分。",
+        "**抽样波动**：同一批重抽下，逻辑回归（结构加文本）自身分数的 95% 区间。模型之间的 Test 差距小于这个波动时，不宜视为真实差别。",
+        table(["指标", "Test 分数", "95% 区间", "约 ±"], range_rows, text_columns=1),
+    ])
+
+
+def overfit_section():
+    rows = []
+    for task, name, key in [("q1", "Q1 F1", "f1"), ("q2", "Q2 八类 macro-F1", "macro_f1_8_classes")]:
+        for model, label in [("logreg_structural", "仅结构"), ("logreg_both", "结构加文本")]:
+            r = load(task, model)
+            rows.append([name, label, f(r["Train"][key]), f(r["Dev"][key]), f(r["Test"][key]),
+                         f"{r['Train'][key] - r['Test'][key]:+.3f}"])
+    return "\n\n".join([
+        "## 过拟合检查",
+        "逻辑回归在拟合用的 Train 上的分数与 Dev、Test 对比。Q1 的 Train 分数沿用 Dev 上选定的阈值。"
+        "Train 比 Test 高得越多，说明模型越多地记住了只在 Train 中出现的线索。",
+        table(["指标", "输入", "Train", "Dev", "Test", "Train − Test"], rows),
     ])
 
 
@@ -155,8 +180,8 @@ def q2_section():
     matrix_rows = [[f"{SHORT[label]} ({counts[label]})", *row] for label, row in zip(RELATION_TYPES, matrix)]
     structural = r["logreg_structural"]["Test"]["macro_f1_8_classes"]
 
-    predictions = pd.read_csv(OUTPUT_DIR / "predictions" / "q2_logreg_both_Test.csv", dtype=str)
-    rare = predictions[predictions["relation_type"].isin(["Drug_Interaction", "Conversion"])]
+    best = predictions("q2", "logreg_both")
+    rare = best[best["relation_type"].isin(["Drug_Interaction", "Conversion"])]
     rare_rows = [[p.pmid, p.pair_type, p.entity1, p.entity2, p.relation_type, p.predicted] for p in rare.itertuples()]
 
     return "\n\n".join([
@@ -185,6 +210,7 @@ def main():
         q1_section(),
         q2_section(),
         gain_section(),
+        overfit_section(),
         "## 复跑",
         "```\n"
         "python sota/prepare_pairs.py\n"

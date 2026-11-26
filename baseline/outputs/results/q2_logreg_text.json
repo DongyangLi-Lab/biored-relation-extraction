@@ -1,4 +1,153 @@
 {
+  "Train": {
+    "n": 4174,
+    "macro_f1_8_classes": 0.3997,
+    "macro_f1_present_classes": 0.3997,
+    "per_class": {
+      "Association": {
+        "n": 2190,
+        "precision": 0.8508,
+        "recall": 0.984,
+        "f1": 0.9126
+      },
+      "Positive_Correlation": {
+        "n": 1088,
+        "precision": 0.8913,
+        "recall": 0.8217,
+        "f1": 0.8551
+      },
+      "Negative_Correlation": {
+        "n": 763,
+        "precision": 0.9021,
+        "recall": 0.7366,
+        "f1": 0.811
+      },
+      "Bind": {
+        "n": 60,
+        "precision": 1.0,
+        "recall": 0.1167,
+        "f1": 0.209
+      },
+      "Cotreatment": {
+        "n": 31,
+        "precision": 1.0,
+        "recall": 0.2581,
+        "f1": 0.4103
+      },
+      "Comparison": {
+        "n": 28,
+        "precision": 0.0,
+        "recall": 0.0,
+        "f1": 0.0
+      },
+      "Drug_Interaction": {
+        "n": 11,
+        "precision": 0.0,
+        "recall": 0.0,
+        "f1": 0.0
+      },
+      "Conversion": {
+        "n": 3,
+        "precision": 0.0,
+        "recall": 0.0,
+        "f1": 0.0
+      }
+    },
+    "confusion_matrix": {
+      "labels": [
+        "Association",
+        "Positive_Correlation",
+        "Negative_Correlation",
+        "Bind",
+        "Cotreatment",
+        "Comparison",
+        "Drug_Interaction",
+        "Conversion"
+      ],
+      "rows_true_columns_predicted": [
+        [
+          2155,
+          22,
+          13,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          170,
+          894,
+          24,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          138,
+          63,
+          562,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          48,
+          2,
+          3,
+          7,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          5,
+          7,
+          11,
+          0,
+          8,
+          0,
+          0,
+          0
+        ],
+        [
+          12,
+          7,
+          9,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          2,
+          8,
+          1,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          3,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ]
+      ]
+    }
+  },
   "Dev": {
     "n": 1161,
     "macro_f1_8_classes": 0.1628,

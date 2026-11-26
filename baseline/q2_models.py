@@ -47,7 +47,8 @@ def main():
     model = make_pipeline(FEATURE_SETS[args.features](), make_classifier())
     model.fit(train, train["relation_type"])
 
-    results = {}
+    # Train scores on the data the model was fitted on; comparing them with Dev and Test shows how much it overfits.
+    results = {"Train": q2_metrics(train, model.predict(train))}
     for split in evaluated_splits(args):
         part = table[table["split"] == split]
         predicted = model.predict(part)

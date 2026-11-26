@@ -1,5 +1,26 @@
 {
   "threshold": 0.3559,
+  "Train": {
+    "n": 21755,
+    "precision": 0.777,
+    "recall": 0.88,
+    "f1": 0.8253,
+    "average_precision": 0.8963,
+    "by_same_sentence": {
+      "same_sentence": {
+        "n": 9316,
+        "precision": 0.7666,
+        "recall": 0.9265,
+        "f1": 0.839
+      },
+      "different_sentences": {
+        "n": 12439,
+        "precision": 0.9,
+        "recall": 0.5852,
+        "f1": 0.7093
+      }
+    }
+  },
   "Dev": {
     "n": 6334,
     "precision": 0.6393,
