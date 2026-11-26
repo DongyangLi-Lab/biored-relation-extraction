@@ -1,0 +1,301 @@
+{
+  "majority_class": "Association",
+  "Dev": {
+    "n": 1161,
+    "macro_f1_8_classes": 0.0813,
+    "macro_f1_present_classes": 0.1085,
+    "per_class": {
+      "Association": {
+        "n": 560,
+        "precision": 0.4823,
+        "recall": 1.0,
+        "f1": 0.6508
+      },
+      "Positive_Correlation": {
+        "n": 352,
+        "precision": 0.0,
+        "recall": 0.0,
+        "f1": 0.0
+      },
+      "Negative_Correlation": {
+        "n": 216,
+        "precision": 0.0,
+        "recall": 0.0,
+        "f1": 0.0
+      },
+      "Bind": {
+        "n": 18,
+        "precision": 0.0,
+        "recall": 0.0,
+        "f1": 0.0
+      },
+      "Cotreatment": {
+        "n": 10,
+        "precision": 0.0,
+        "recall": 0.0,
+        "f1": 0.0
+      },
+      "Comparison": {
+        "n": 5,
+        "precision": 0.0,
+        "recall": 0.0,
+        "f1": 0.0
+      },
+      "Drug_Interaction": {
+        "n": 0,
+        "precision": 0.0,
+        "recall": 0.0,
+        "f1": 0.0
+      },
+      "Conversion": {
+        "n": 0,
+        "precision": 0.0,
+        "recall": 0.0,
+        "f1": 0.0
+      }
+    },
+    "confusion_matrix": {
+      "labels": [
+        "Association",
+        "Positive_Correlation",
+        "Negative_Correlation",
+        "Bind",
+        "Cotreatment",
+        "Comparison",
+        "Drug_Interaction",
+        "Conversion"
+      ],
+      "rows_true_columns_predicted": [
+        [
+          560,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          352,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          216,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          18,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          10,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          5,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ]
+      ]
+    }
+  },
+  "Test": {
+    "n": 1163,
+    "macro_f1_8_classes": 0.0883,
+    "macro_f1_present_classes": 0.0883,
+    "per_class": {
+      "Association": {
+        "n": 635,
+        "precision": 0.546,
+        "recall": 1.0,
+        "f1": 0.7063
+      },
+      "Positive_Correlation": {
+        "n": 325,
+        "precision": 0.0,
+        "recall": 0.0,
+        "f1": 0.0
+      },
+      "Negative_Correlation": {
+        "n": 171,
+        "precision": 0.0,
+        "recall": 0.0,
+        "f1": 0.0
+      },
+      "Bind": {
+        "n": 9,
+        "precision": 0.0,
+        "recall": 0.0,
+        "f1": 0.0
+      },
+      "Cotreatment": {
+        "n": 14,
+        "precision": 0.0,
+        "recall": 0.0,
+        "f1": 0.0
+      },
+      "Comparison": {
+        "n": 6,
+        "precision": 0.0,
+        "recall": 0.0,
+        "f1": 0.0
+      },
+      "Drug_Interaction": {
+        "n": 2,
+        "precision": 0.0,
+        "recall": 0.0,
+        "f1": 0.0
+      },
+      "Conversion": {
+        "n": 1,
+        "precision": 0.0,
+        "recall": 0.0,
+        "f1": 0.0
+      }
+    },
+    "confusion_matrix": {
+      "labels": [
+        "Association",
+        "Positive_Correlation",
+        "Negative_Correlation",
+        "Bind",
+        "Cotreatment",
+        "Comparison",
+        "Drug_Interaction",
+        "Conversion"
+      ],
+      "rows_true_columns_predicted": [
+        [
+          635,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          325,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          171,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          9,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          14,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          6,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          2,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          1,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ]
+      ]
+    }
+  }
+}
